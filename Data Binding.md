@@ -20,6 +20,7 @@ immaginiamo di voler riportare il contenuto della variabile `title` all'interno 
 ```html
 <h5>{{ title }}</h5>
 ```
+si possono usare anche operatori TypeScript e funzioni ma non si possono usare blocchi di codice.
 
 #### Property Binding
 Il property binding lo usiamo per legare delle proprietà del DOM al contenuto di variabili all'interno della classe TypeScript. Immaginiamo di avere il file `test.component.ts` come:
@@ -88,3 +89,4 @@ per poter usare la direttiva bisogna importare il component:
 ```ts
 import {FormsModule} from '@angular/forms';
 ```
+Con il binding a due vie quindi si riesce a rispondere agli eventi in entrambe le direzioni.

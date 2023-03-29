@@ -3,11 +3,13 @@ Le direttive permettono di aggiungere dei comportamenti alle applicazioni Angula
 - Attribute Directives
 - Structural Directives
 
+I components  sono infatti delle directives con un template, esistono poi le directives senza template. 
+
 #### Attribute Directives
 Le attribute directives cambiano l'aspetto o il comportamento di un elemento, component o di un'altra direttiva, ascoltano e modificano il comportamento degli elementi HTML, attributi, proprietà e componenti. 
 Si possono aggiungere o rimuovere classi CSS simultaneamente attraverso la direttiva `ngClass`, un esempio con l'operatore ternario è:
 ```html
-<div [ngClass]="isOnline ? 'online' : 'offline'"> ... </div>
+<div [ngClass]="getClass()"> ... </div>
 ```
 Usando la direttiva `ngStyle` si possono impostare stili diversi simultaneamente in base allo stato del component:
 ```html
@@ -19,6 +21,11 @@ Le direttive strutturali sono responsabili del layout HTML modificandolo, aggiun
 Si può aggiungere o rimuovere un elemento aggiungendo una direttiva `ngIf` all'elemento, se la condizione è falsa Angular rimuove un elemento ed i suoi discendenti dal DOM.
 ```html
 <div *ngIf="isActive"> ... </div>
+```
+Si può anche creare un blocco else utilizzando un riferimento locale al blocco:
+```html
+<div *ngIf="isActive"; else #notActiveBlock> Active! </div>
+<ng-template #noActiveBlock> Not Active! </ng-template>
 ```
 Con la direttiva `ngFor` invece si presenta una lista di oggetti.
 ```html

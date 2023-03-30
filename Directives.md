@@ -46,7 +46,7 @@ Per creare una direttiva custom si usa il comando di CLI:
 ```bash
 ng generate directive test
 ```
-il file `directiveNam.directive.ts` che viene creato conterrà:
+il file `directiveName.directive.ts` che viene creato conterrà:
 ```ts
 import { Directive } from '@angular/core';
 
@@ -111,3 +111,37 @@ export class TestDirective {
 	}
 }
 ```
+
+In ogni caso però non è una buona pratica quella di accedere direttamente agli elementi dalla classe TypeScript, è meglio utilizzare il renderer:
+```ts
+@Directive({
+	selector: '[appTest]'
+})
+export class TestDirective implements OnInit {
+	constructor(private el: ElementRef, private renderer: Renderer2) { }
+
+	ngOnInit(): void {
+		this.renderer.setStyle(this.el.nativeElement, "color", "blue");
+	}
+}
+```
+il motivo per cui è meglio usare questo approccio è che Angular non è limitato ad essere usato sui browser ma anche ad esempio sui service workers ed altre cose che potrebbero non avere accesso al DOM. Quindi cercando di cambiare direttamente il DOM modificando direttamente l'elemento si potrebbe incorrere in errori.
+Per impostare semplici proprietà si può anche usare l'host binding, ossia si lega una variabile della classe con una proprietà dell'host:
+```ts
+@Directive({
+	selector: '[appTest]'
+})
+export class testDirective {
+	@HostBinding('style.backgroundColor') bgColor: string = "transparent";
+
+	@HostListener('mouseenter') onMouseEnter() {
+		bgColor = "yellow";
+	}
+
+	@HostListener('mouseleave') onMouseLeave() {
+		bgColor = "transparent";
+	}
+}
+```
+
+Si possono anche creare delle direttive strutturali personalizzate.

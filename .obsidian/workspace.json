@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "7a6fe55170352b0e",
+        "id": "58a17fdb257ed39d",
         "type": "tabs",
         "children": [
           {
-            "id": "eec07a3e3f030c08",
+            "id": "eb0a3596549a9921",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Services e Dependency Injection.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Services e Dependency Injection.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Services e Dependency Injection.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Services e Dependency Injection.md"
+              }
             }
           }
         ]
@@ -138,12 +146,14 @@
       "command-palette:Apri riquadro comandi": false
     }
   },
-  "active": "eec07a3e3f030c08",
+  "active": "eb0a3596549a9921",
   "lastOpenFiles": [
-    "Template Variable.md",
-    "Directives.md",
-    "Funzioni Pipe.md",
     "Passaggio dati in gerarchia di components.md",
+    "Directives.md",
+    "Theory Concepts.md",
+    "Services e Dependency Injection.md",
+    "Template Variable.md",
+    "Funzioni Pipe.md",
     "Data Binding.md",
     "2023-03-28.md"
   ]

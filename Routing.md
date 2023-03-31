@@ -135,3 +135,17 @@ this.route.queryParams.subscribe(...);
 ```
 
 #### Nested Routing
+Si possono creare dei percorsi figli di altri percorsi di routing:
+```ts
+const appRoutes: Routes = [
+	{ path: '', component: HomeComponent },
+	{ path: 'users', component: UsersComponent },
+	{ path: 'users/:id', component: UserComponent },
+	{ path: 'server', component: ServerComponent, children: [
+		{path: ':id', component: ServerComponent},
+		{path: ':id/edit', component: EditComponent}
+	]},
+	...
+]
+```
+bisogna però indicare un outlet per indicare dove caricare i component a cui permettono di arrivare le route figlie, bisogna quindi specificare un nuovo router-outlet all'interno del component raggiunto dal percorso primario da cui poi partono i percorsi figli, bisogna però fare attenzione che i parametri siano presi in modo asincrono perché il component non viene reinizializzato ogni volta che si cambia percorso figlio.

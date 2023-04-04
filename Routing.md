@@ -149,3 +149,128 @@ const appRoutes: Routes = [
 ]
 ```
 bisogna però indicare un outlet per indicare dove caricare i component a cui permettono di arrivare le route figlie, bisogna quindi specificare un nuovo router-outlet all'interno del component raggiunto dal percorso primario da cui poi partono i percorsi figli, bisogna però fare attenzione che i parametri siano presi in modo asincrono perché il component non viene reinizializzato ogni volta che si cambia percorso figlio.
+Quando però si passa da una rotta padre ad una figlio si perdono i parametri di querying eventualmente passati precedentemente, per evitare di perderli, bisogna passare nell'oggettto argomento della funzione `navigate()` il campo `queryParamsHandling` che potrà contenere la stringa:
+- `'preserve'` per conservarli
+- `'merge'` per unirli a nuovi parametri eventualmente passati
+
+#### Redirecting e wildcard routes
+Alcune volte si vorrebbe avere che un determinato percorso non porti ad un component ma che venga reindirizzato verso un altro percorso che invece a sua volta ha definito un component, in questo caso bisogna creare l'oggetto path:
+```ts
+const appRoutes: Routes = [
+	{ path: '', component: HomeComponent },
+	{ path: 'users', component: UsersComponent },
+	{ path: 'users/:id', component: UserComponent },
+	{ path: 'server', component: ServerComponent, children: [
+		{path: ':id', component: ServerComponent},
+		{path: ':id/edit', component: EditComponent}
+	]},
+	{ path: 'utenti', redirectTo: '\users'},
+]
+```
+Per coprire tutti i percorsi che l'app non conosce si può usare un percorso jolly come ultimo nella lista dei possibili percorsi;:
+```ts
+const appRoutes: Routes = [
+	{ path: '', component: HomeComponent },
+	{ path: 'users', component: UsersComponent },
+	{ path: 'users/:id', component: UserComponent },
+	{ path: 'server', component: ServerComponent, children: [
+		{path: ':id', component: ServerComponent},
+		{path: ':id/edit', component: EditComponent}
+	]},
+	{ path: 'utenti', redirectTo: '\users'},
+	{ path: 'not-found', component: NotFoundComponent },
+	{ path: '**', redirectTo: '/not-found'}
+]
+```
+bisogna però fare attenzione che questo percorso sia messo per ultimo perché se no qualsiasi url impostato verrebbe reindirizzato.
+
+Angular fa i math dei percorsi per prefisso, quindi la route seguente sarà corrispondente sia a `/` che a `/recipes`:
+```ts
+[{path: '', redirectTo: '/somewhere-else'}]
+```
+ogni route infatti ha un matching per prefisso come default, per sistemare questo comportamento si deve cambiare la strategia di matching:
+```ts
+[{path: '', redirectTo: '/somewhere-else', pathMatch: 'full'}]
+```
+
+#### Guards
+A volte vogliamo proteggere alcuni percorsi dal poter essere raggiunti, quindi vogliamo controllare prima che il percorso venga caricato che si abbiano le autorizzazioni necessarie per visualizzarlo.
+Creiamo dunque un servizio:
+```ts
+export class AuthGuard implements CanActivate {
+	canActivate(route: ActivatedRouteSnapshot, 
+				state: RouterStateSnapshot): Observable<boolean> |                                        Promise<boolean> | boolean {
+		...
+	}
+}
+```
+per proteggere un percorso si deve aggiungere nell'oggetto nel quale è dichiarato:
+```ts
+const appRoutes: Routes = [
+	{ path: '', component: HomeComponent },
+	{ path: 'users', canActivate: [AuthGuard], component: UsersComponent},
+	{ path: 'users/:id', component: UserComponent },
+	{ path: 'server', component: ServerComponent, children: [
+		{path: ':id', component: ServerComponent},
+		{path: ':id/edit', component: EditComponent}
+	]},
+	{ path: 'utenti', redirectTo: '\users'},
+	{ path: 'not-found', component: NotFoundComponent },
+	{ path: '**', redirectTo: '/not-found'}
+]
+```
+si può anche controllare l'accesso ai children di una route attraverso la funzione `canActivateChild()`.
+
+Oltre all'accesso, si può anche controllare l'uscita da una route, ad esempio per essere sicuri di non uscire per sbaglio da una pagina. Anche in questo caso si crea un servizio:
+```ts
+export interface CanComponentDeactivate {
+	canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean
+}
+
+export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+	canDeactivate(component: CanComponentDeactivate,
+		currentRoute: ActivatedRouteSnapshot,
+		currentState: RouterStateSnapshot,
+		nextState?: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+		...
+	}
+}
+```
+ci serve una connessione tra la guard ed il component.
+
+#### Passaggio di dati ad una route
+Si possono passare dei dati ad una route per favorire il riutilizzo dei component, come ad esempio una pagina di errore, che visualizza un messaggio diverso in base alla route dalla quale è stata raggiunta. Per passare in modo statico i dati bisogna aggiungere il campo `data` nella dichiarazione del percorso: 
+```ts
+const appRoutes: Routes = [
+	{ path: '', component: HomeComponent },
+	{ path: 'users', component: UsersComponent },
+	{ path: 'users/:id', component: UserComponent },
+	{ path: 'server', component: ServerComponent, children: [
+		{path: ':id', component: ServerComponent},
+		{path: ':id/edit', component: EditComponent}
+	]},
+	{ path: 'utenti', redirectTo: '\users'},
+	{ path: 'not-found', component: ErrorComponent, data: {message: 'Page not found!'} },
+	{ path: '**', redirectTo: '/not-found'}
+]
+```
+per recuperare i dati passati all'interno del component si deve iniettare la route attiva:
+```ts
+@Component({
+	selector: 'app-error',
+	templateUrl: './error.component.html',
+	styleUrls: './error.component.css'
+})
+export class ErrorComponent implements OnInit {
+	errorMessage: string;
+
+	constructor(private route: ActivatedRoute) {}
+
+	ngOnInit() {
+		this.errorMessage = this.route.snapshot.data['message'];
+	}
+}
+```
+nel caso in cui possano cambiare si utilizza il metodo `subscribe`.
+
+Se si volessero passare insieme alla route dei dati asincroni, quindi effettuare un passaggio dinamico dei dati, si deve usare un servizio che implementa l'interfaccia `Resolve`.

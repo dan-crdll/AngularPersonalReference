@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Forms.md",
+                "file": "Funzioni Pipe.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Forms.md",
+                "file": "Funzioni Pipe.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Forms.md",
+                "file": "Funzioni Pipe.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Forms.md"
+                "file": "Funzioni Pipe.md"
               }
             }
           }
@@ -148,8 +148,8 @@
   },
   "active": "b7ad765452df4f53",
   "lastOpenFiles": [
-    "Template Variable.md",
     "Forms.md",
+    "Template Variable.md",
     "Observable.md",
     "Data Binding.md",
     "Passaggio dati in gerarchia di components.md",

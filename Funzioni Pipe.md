@@ -11,3 +11,39 @@ si possono anche concatenare le pipes ottenendo formattazioni più complesse:
 ```html
 <p> {{ currentDate | date | uppercase }} </p>
 ```
+
+#### Custom Pipes
+A volte si hanno delle necessità non coperte dalle formattazioni possibili date dalle pipes, per creare una pipe bisogna creare un file `name.pipe.ts` dove si esporta una classe:
+```ts
+@Pipe({
+	name: 'shorten'
+})
+export class ShortenPipe implements PipeTransform {
+	transform(value: any) {
+		return value.substr(0, 5);
+	}
+}
+```
+successivamente si deve aggiungere la pipe nella sezione `Declaration` di `app.module.ts`.
+Si possono anche parametrizzare le pipe personalizzate:
+```ts
+@Pipe({
+	name: 'shorten'
+})
+export class ShortenPipe implements PipeTransform {
+	transform(value: any, limit: number, anArg: any) {
+		return value.substr(0, limit);
+	}
+}
+```
+Le pipe non vengono rieseguite ogni volta che cambiano i dati, a meno che non venga aggiunta la proprietà al decoratore:
+```ts
+@Pipe({
+	name: 'shorten',
+	pure: 'false'
+})
+```
+però può portare a problemi di performance.
+
+#### Async Pipe
+Se si ha una `Promise` o un `Observable` come dato che si vuole interpolare, non è possibile farlo direttamente perché non verrebbe aggiornato automaticamente quando arriva, ma usando la pipe `async` sarà possibile farlo.

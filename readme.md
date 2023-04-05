@@ -12,4 +12,5 @@ Unofficial Angular Reference in Italian, just for personal use.
 - [Routing](./Routing.md)
 - [Observable](./Observable.md)
 - [Forms](./Forms.md)
+- [Richieste HTTP](./Richieste%20HTTP.md)
 - 

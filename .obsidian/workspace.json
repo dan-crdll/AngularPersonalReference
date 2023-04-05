@@ -4,35 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "58a17fdb257ed39d",
+        "id": "3126f029ef97368a",
         "type": "tabs",
         "children": [
           {
-            "id": "eb0a3596549a9921",
+            "id": "22dbf6b4e3ea61f4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Services e Dependency Injection.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "53e7a296b64222dd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Routing.md",
+                "file": "Forms.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Routing.md",
+                "file": "Forms.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Routing.md",
+                "file": "Forms.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Routing.md"
+                "file": "Forms.md"
               }
             }
           }
@@ -159,15 +146,17 @@
       "command-palette:Apri riquadro comandi": false
     }
   },
-  "active": "53e7a296b64222dd",
+  "active": "22dbf6b4e3ea61f4",
   "lastOpenFiles": [
-    "Services e Dependency Injection.md",
-    "Routing.md",
+    "Observable.md",
+    "Forms.md",
     "Data Binding.md",
     "Passaggio dati in gerarchia di components.md",
     "Directives.md",
-    "Theory Concepts.md",
     "Template Variable.md",
+    "Routing.md",
+    "Services e Dependency Injection.md",
+    "Theory Concepts.md",
     "Funzioni Pipe.md",
     "2023-03-28.md"
   ]

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "32b3f6225ed4a828",
+        "id": "7b469873cf7e1e66",
         "type": "tabs",
         "children": [
           {
-            "id": "b7ad765452df4f53",
+            "id": "0627b2050c7db0e0",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -69,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "290cffd895d8ed69",
@@ -146,13 +146,13 @@
       "command-palette:Apri riquadro comandi": false
     }
   },
-  "active": "b7ad765452df4f53",
+  "active": "0627b2050c7db0e0",
   "lastOpenFiles": [
-    "readme.md",
     "Observable.md",
-    "Richieste HTTP.md",
-    "Forms.md",
     "Funzioni Pipe.md",
+    "Richieste HTTP.md",
+    "readme.md",
+    "Forms.md",
     "Data Binding.md",
     "Services e Dependency Injection.md",
     "ReadMe.md",

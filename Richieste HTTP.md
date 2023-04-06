@@ -80,3 +80,92 @@ export class PostTestComponent {
 }
 ```
 in questo modo avremo tutti gli oggetti ricevuti all'interno di un array che ne permette una gestione più agevole. Il metodo `get` è inoltre un generico all'interno del quale si può definire il tipo della risposta che viene restituita.
+
+#### Usare servizi per le richieste HTTP
+Nelle applicazioni più grandi si potrebbero avere component con molto codice non direttamente correlato con l'interfaccia utente. I servizi sono la parte dell'applicazione che si occupa del lavoro di calcolo o trasformazione dei dati, mentre i component dovrebbero avere quasi solo codice correlato con il template. 
+Per questo motivo è una buona pratica spostare la parte correlata alla richiesta HTTP in un servizio mentre la parte correlata al template deve rimanere all'interno del component.
+
+#### Gestione degli errori
+Quando si comunica con il backend possono capitare diversi errori, bisogna gestirli. Quando ci si iscrive ad un observable si può passare una funzione per il caso in cui la sottoscrizione vada a buon fine, però si può passare anche una funzione che viene eseguita solo in caso di errore. 
+```ts
+this.postsService.fetchPosts().subscribe({
+	next: (data) => {
+		this.doSomethingWithData(data);
+	},
+	error: (error: Error) => {
+		console.log(error.message);
+	}
+})
+```
+nel caso in cui la sottoscrizione ad un Observable avvenga direttamente dentro un servizio, ma l'errore interessa ad altre parti dell'applicazione, si può creare un `Subject`.
+Inoltre è anche possibile usare l'operator `catchError()` dopo il `map()` operator nella pipe, per trasformare e gestire l'errore in base a quello che si vuole fare, dentro al quale si ritorna un altro observable che incorpori l'errore attraverso il metodo `throwError()`.
+
+#### Parametri della richiesta
+###### Headers
+Quando si invia una richiesta HTTP si specifica il metodo HTTP usato, e se necessario anche i dati che devono essere inviati, alle volte è necessario però inviare anche degli headers HTTP per diversi motivi come l'autenticazione.
+Ogni metodo di richiesta HTTP ha un argomento extra che è un oggetto dove si può configurare la richiesta, il primo dei campi è il campo `headers`:
+```ts
+this.http.get<ContentType>(url, 
+						   {headers: new HttpHeaders({
+							   'CustomHttpHeader': 'hello',
+						   })})
+```
+dipende poi dall'API che si sta utilizzando.
+
+###### Query Params
+Inoltre è possibile inviare dei parametri di query:
+```ts
+this.http.get<ContentType>(url, 
+						   {headers: new HttpHeaders({
+							   'CustomHttpHeader': 'hello',
+						   }),
+						   params: new HttpParams()
+							   .set('print', 'pretty'),
+							})
+```
+per usare più di un parametro bisogna dichiarare una variabile:
+```ts
+let searchParams = new HttpParams();
+searchParams = searchParams.append('print', 'pretty');
+```
+si potrebbero anche includere nell'url ma usando questo metodo si ha una soluzione più pulita evitando stringhe troppo lunghe.
+
+##### Tipi di risposta
+Quello che di default ci viene mostrato quando otteniamo la risposta HTTP è il suo corpo, in realtà impostando nell'oggetto un campo `observe` è possibile ottenere l'intera risposta:
+```ts
+this.http.post(url, {
+			observe: 'response'
+		}
+	);
+```
+usando `observe: 'events'` si ottengono informazioni su quello che accade dal lato backend.
+Inoltre è possibile anche cambiare il tipo del body della risposta che si riceve, di default è impostato su json ma è possibile ottenere anche testi o blob, impostando il campo `responseType: 'json'`.
+
+#### Interceptors
+Immaginiamo di voler applicare a tutte le richieste HTTP che inviamo un certo header, nell'approccio visto precedentemente dovremmo includerlo in ogni richiesta. Per evitare di inserirlo manualmente in ogni richiesta possiamo creare un interceptor. Creiamo dunque un nuovo file `name-interceptor.service.ts` quindi:
+```ts
+export class NameInterceptorService implements HttpInterceptor {
+	intercept(req: HttpRequest<KindOfData>, next: HttpHandler) {
+		console.log('Request is on its way');
+		return next.handle(req);
+	}
+}
+```
+Il codice all'interno del metodo `intercept()` viene eseguito prima che la richiesta HTTP lasci la nostra applicazione, dopo viene passata la richiesta al metodo `handle` di `next` che permette alla richiesta di continuare il suo percorso.
+Per utilizzare l'interceptor bisogna fornirlo, per farlo bisogna includerlo nei `providers` di `app.module.ts` come oggetto JavaScript:
+```ts
+...
+providers: [{
+		provide: HTTP_INTERCEPTORS, 
+		useClass: NameInterceptorService,
+		multi: true
+	}],
+...
+```
+All'interno di `intercept` si può manipolare la richiesta, la `req` passata però è immutabile quindi bisogna crearne una nuova clonandola:
+```ts
+const modifiedRequest = req.clone({url: 'new url', ...})
+```
+e poi si invia la richiesta modificata.
+
+Non siamo limitati ad usare gli interceptor con le richieste, ma possiamo usarli anche con le risposte. Il metodo `handle()` restituisce infatti un observable sul quale possiamo usare `pipe()` e passare degli operatori tra cui `tap()` che ci permette di controllare la risposta senza restituire nulla, e quindi farla continuare nella pipe. Nell'interceptor però si hanno sempre `events` così che si possa avere un controllo più accurato sulla risposta stessa. 

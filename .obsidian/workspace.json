@@ -8,18 +8,31 @@
         "type": "tabs",
         "children": [
           {
-            "id": "0627b2050c7db0e0",
+            "id": "be5ecbf3e633e103",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Richieste HTTP.md",
+                "file": "Routing.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "b69460a9b28195f5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Theory Concepts.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Richieste HTTP.md",
+                "file": "Theory Concepts.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Richieste HTTP.md",
+                "file": "Theory Concepts.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Richieste HTTP.md"
+                "file": "Theory Concepts.md"
               }
             }
           }
@@ -146,21 +159,24 @@
       "command-palette:Apri riquadro comandi": false
     }
   },
-  "active": "0627b2050c7db0e0",
+  "active": "b69460a9b28195f5",
   "lastOpenFiles": [
-    "Observable.md",
-    "Funzioni Pipe.md",
-    "Richieste HTTP.md",
-    "readme.md",
-    "Forms.md",
-    "Data Binding.md",
     "Services e Dependency Injection.md",
+    "readme.md",
+    "Richieste HTTP.md",
+    "Theory Concepts.md",
+    "Modules.md",
+    "Components Dinamici.md",
+    "Directives.md",
+    "Data Binding.md",
+    "Routing.md",
+    "Observable.md",
+    "Authentication e Route Protection.md",
+    "Funzioni Pipe.md",
+    "Forms.md",
     "ReadMe.md",
     "Template Variable.md",
     "Passaggio dati in gerarchia di components.md",
-    "Directives.md",
-    "Routing.md",
-    "Theory Concepts.md",
     "2023-03-28.md"
   ]
 }

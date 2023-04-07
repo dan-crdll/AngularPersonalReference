@@ -1,8 +1,9 @@
 Se ad esempio volessimo accedere e salvare lo stato dell'applicazione su un database, non dovremmo mai conservare le credenziali di accesso al DB nell'app Angular in quanto si tratta di un framework front end e quindi chiunque potrebbe ispezionarne il codice, quindi bisogna comunicare con un server, attraverso le API usando il protocollo HTTP. Usare le API di un server è come visitare un sito web solo che invece di ricevere codice HTML si ricevono dati, spesso in formato JSON. Sarà poi il server, tramite il backend ad occuparsi della comunicazione con il database.
 Una richiesta HTTP si compone dei campi:
-```
-HTTP Verb     URL(API Endpoint)      Headers(Metadata)       [Body]
-```
+- HTTP Verb
+- URL (API Endpoint)
+- Headers (Metadata)
+- Body
 
 #### Richieste POST
 Per potere effettuare richieste HTTP bisogna importare in `app.module.ts` il modulo `HttpClientModule`, dopo dovremo iniettare un'istanza di `HttpClient` nei component dai quali vogliamo inviare richieste. 
@@ -169,3 +170,46 @@ const modifiedRequest = req.clone({url: 'new url', ...})
 e poi si invia la richiesta modificata.
 
 Non siamo limitati ad usare gli interceptor con le richieste, ma possiamo usarli anche con le risposte. Il metodo `handle()` restituisce infatti un observable sul quale possiamo usare `pipe()` e passare degli operatori tra cui `tap()` che ci permette di controllare la risposta senza restituire nulla, e quindi farla continuare nella pipe. Nell'interceptor però si hanno sempre `events` così che si possa avere un controllo più accurato sulla risposta stessa. 
+
+#### Authentication e Route Protection
+La maggior parte delle applicazioni richiede un processo di autenticazione per essere usate o per accedere ad alcune parti. 
+Quando un utente inserisce le informazioni di autenticazione nel client, queste vengono inviate al server dove vengono validate, in una applicazione tradizionale il server risponderebbe con una sessione, ma nel caso delle applicazioni Angular si hanno delle single page application quindi il routing viene gestito direttamente da Angular, il server è quindi una RESTful API, quindi stateless, quindi il server è una API e di conseguenza non si occupa del rendering delle pagine, il front end ed il back end sono completamente sganciati. Si usa quindi un altro approccio, il server valuta le credenziali inserite e se sono valide risponde con un token, solitamente un json web token. Il token viene generato con un algoritmo che conosce solo il server, quindi l'idea è che il client conservi il token da qualche parte e poi lo invii al server per autorizzare le richieste successive. 
+Dopo aver inviato quindi la richiesta HTTP per il sign in al server riceveremo un token che eventualmente potrebbe anche scadere. Creiamo quindi un modello per il nostro utente:
+```ts
+export class User {
+	constructor(
+		public email: string,
+		public id: string,
+		private token: string,
+		private tokenExpirationDate: Date
+	) {}
+
+	get token() {
+		if(this.tokenExpirationDate || 
+			new Date() > this.tokenExpirationDate) {
+			return this.token;
+		}
+		return null;
+	}
+}
+```
+nel servizio di autenticazione quindi possiamo salvare l'utente come `Subject` in modo da poter inviare degli eventi. 
+Dopo aver fatto il login possiamo pensare di avere un reindirizzamento ad una pagina a cui si è autorizzati. Questo ovviamente viene fatto con il router all'interno della parte success della sottoscrizione all'observable della richiesta HTTP.
+Nella comunicazione con il backend dobbiamo poi passare il token per effettuare le richieste che altrimenti non andranno a buon fine. 
+Possiamo salvare il token nel local storage del browser:
+```ts
+localStorage.setItem('userData', JSON.stringify(user));
+```
+per recuperarlo quando l'applicazione si restarta invece si scrive:
+```ts
+autoLogin() {
+	const userData = localStorage.getItem('userData');
+	if(!userData) 
+		return;
+	const loadedUser = new User(userData.email, userData._token);
+
+	if(loadedUser.token) {
+		this.user.next(loadedUser);
+	}
+}
+```

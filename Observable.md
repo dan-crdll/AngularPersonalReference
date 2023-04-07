@@ -129,9 +129,11 @@ export class ObservableTestComponent implements OnInit {
 }
 ```
 si possono usare più operatori come `map()`, `filter()` e molti altri.
+Per concatenare più observable si usa l'operatore `exhaustMap()`.
 
 #### Subjects
 Un subject permette il passaggio di informazioni tra diversi component senza usare il metodo di emissione degli eventi, si tratta di un tipo particolare di observable.
 Il `Subject` è qualcosa a cui ci si può iscrivere ma è più attivo di un `Observable` perché è possibile usare il metodo `next()` dall'esterno, è quindi perfetto per essere usato come emettitore di eventi.
 Si tratta di un metodo più efficiente degli `EventEmitter` però bisogna ricordarsi sempre di disiscriversi dal `Subject` quando non è più necessario per non avere memory leaks. 
 Non si usano i `Subject` quando si hanno parametri `@Output()`, i `Subject` si usano solo per la comunicazione tra component.
+Esistono inoltre i `BehaviourSubject` che permettono l'accesso anche ai valori emessi precedentemente anche se ancora non ci si era iscritti, in questo caso è utile l'operatore `take(1)` che restituisce l'ultimo valore emesso e si disiscrive automaticamente.

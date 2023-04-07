@@ -13,4 +13,5 @@ Unofficial Angular Reference in Italian, just for personal use.
 - [Observable](./Observable.md)
 - [Forms](./Forms.md)
 - [Richieste HTTP](./Richieste%20HTTP.md)
+- [Dynamic Components](./Components%20Dinamici.md)
 - 
